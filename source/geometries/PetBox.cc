@@ -31,6 +31,7 @@
 #include <G4UserLimits.hh>
 #include <G4OpticalSurface.hh>
 #include <G4LogicalSkinSurface.hh>
+#include <G4SubtractionSolid.hh>
 
 using namespace nexus;
 
@@ -79,6 +80,9 @@ PetBox::PetBox() : GeometryBase(),
                    panel_sipm_xy_size_(66. * mm),
                    dist_sipms_panel_sipms_(0.3 * mm),
                    wls_depth_(0.001 * mm),
+                   block_width_(1. * cm),
+                   block_hole_rad_(1. * mm),
+                   block_material_("copper"),
                    max_step_size_(1. * mm)
 
 {
@@ -116,6 +120,18 @@ PetBox::PetBox() : GeometryBase(),
   time_cmd.SetUnitCategory("Time");
   time_cmd.SetParameterName("sipm_time_binning", false);
   time_cmd.SetRange("sipm_time_binning>0.");
+
+  G4GenericMessenger::Command &block_width_cmd =
+      msg_->DeclareProperty("block_width", block_width_, "Width of the collimator block");
+  block_width_cmd.SetUnitCategory("Length");
+  block_width_cmd.SetParameterName("block_width", false);
+
+  G4GenericMessenger::Command &block_hole_rad_cmd =
+      msg_->DeclareProperty("block_hole_rad", block_hole_rad_, "Radius of the block hole");
+  block_hole_rad_cmd.SetUnitCategory("Length");
+  block_hole_rad_cmd.SetParameterName("block_hole_rad", false);
+
+  msg_->DeclareProperty("block_material", block_material_, "Material of the collimator block");
 }
 
 PetBox::~PetBox()
@@ -499,6 +515,37 @@ void PetBox::BuildBox()
     }
   }
 
+
+  //// BLOCK TO REDUCE XENON VOL AND TO COLLIMATE GAMMAS
+  G4Box *block_nh_solid =
+    new G4Box("BLOCK", dist_lat_panels_ / 2., dist_lat_panels_ / 2., block_width_ / 2.);
+
+  G4double block_z_pos = active_z_pos_min + block_width_ / 2.;;
+
+  // Hole in the block
+  G4Tubs* block_hole_solid = new G4Tubs("BLOCK_HOLE", 0., block_hole_rad_,
+                                        block_width_ / 2., 0, twopi);
+
+  G4SubtractionSolid* block_solid =
+    new G4SubtractionSolid("BLOCK", block_nh_solid, block_hole_solid,
+                           0, G4ThreeVector(0., 0., 0.));
+
+  G4Material *copper = G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu");
+  G4Material *lead = G4NistManager::Instance()->FindOrBuildMaterial("G4_Pb");
+
+  G4LogicalVolume *block_logic = nullptr;
+  if (block_material_ == "copper") {
+    block_logic = new G4LogicalVolume(block_solid, copper, "COPPER_BLOCK");
+  } else if (block_material_ == "lead") {
+    block_logic = new G4LogicalVolume(block_solid, lead, "LEAD_BLOCK");
+  } else {
+    G4Exception("[PetBox]", "BuildBox()", FatalException,
+                "Unknown block material!");
+  }
+
+    new G4PVPlacement(0, G4ThreeVector(0., 10.*mm, -block_z_pos), block_logic,
+                      "BLOCK", LXe_logic_, false, 1, false);
+
   // Visibilities
   if (visibility_) {
     G4VisAttributes box_col = nexus::White();
@@ -528,6 +575,8 @@ void PetBox::BuildBox()
     entry_panel_logic->SetVisAttributes(panel_col);
     horiz_lat_panel_logic->SetVisAttributes(panel_col);
     vert_lat_panel_logic->SetVisAttributes(panel_col);
+    G4VisAttributes block_col = nexus::Blue();
+    block_logic->SetVisAttributes(block_col);
   }
   else
   {
