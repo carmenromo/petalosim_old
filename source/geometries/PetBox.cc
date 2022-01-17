@@ -80,7 +80,7 @@ PetBox::PetBox() : GeometryBase(),
                    panel_sipm_xy_size_(66. * mm),
                    dist_sipms_panel_sipms_(0.3 * mm),
                    wls_depth_(0.001 * mm),
-                   block_width_(1. * cm),
+                   block_width_(2. * cm),
                    block_hole_rad_(1. * mm),
                    block_material_("copper"),
                    max_step_size_(1. * mm)
