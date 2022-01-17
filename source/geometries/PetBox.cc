@@ -523,8 +523,9 @@ void PetBox::BuildBox()
   G4double block_z_pos = active_z_pos_min + block_width_ / 2.;;
 
   // Hole in the block
+  G4double block_hole_offset = 1 *mm;
   G4Tubs* block_hole_solid = new G4Tubs("BLOCK_HOLE", 0., block_hole_rad_,
-                                        block_width_ / 2., 0, twopi);
+                                        (block_width_ + block_hole_offset) / 2., 0, twopi);
 
   G4SubtractionSolid* block_solid =
     new G4SubtractionSolid("BLOCK", block_nh_solid, block_hole_solid,
