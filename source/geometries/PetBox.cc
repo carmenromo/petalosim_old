@@ -543,7 +543,7 @@ void PetBox::BuildBox()
                 "Unknown block material!");
   }
 
-    new G4PVPlacement(0, G4ThreeVector(0., 10.*mm, -block_z_pos), block_logic,
+    new G4PVPlacement(0, G4ThreeVector(0., 0., -block_z_pos), block_logic,
                       "BLOCK", LXe_logic_, false, 1, false);
 
   // Visibilities
