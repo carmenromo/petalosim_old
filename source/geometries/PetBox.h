@@ -84,6 +84,7 @@ private:
   G4double panel_sipm_xy_size_, dist_sipms_panel_sipms_;
   G4double wls_depth_;
 
+  G4bool add_collimator_block_;
   G4double block_width_, block_hole_rad_;
   G4String block_material_;
 

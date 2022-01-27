@@ -8,7 +8,8 @@
 /Geometry/PetBox/tile_refl 0.
 /Geometry/PetBox/sipm_time_binning 5. picosecond
 /Geometry/PetBox/sipm_pde 0.5
-/Geometry/PetBox/block_hole_rad 2. mm
+/Geometry/PetBox/add_collimator_block 0
+/Geometry/PetBox/block_hole_rad 1. mm
 /Geometry/PetBox/block_material lead
 
 ### GENERATOR
