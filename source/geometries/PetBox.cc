@@ -371,6 +371,11 @@ void PetBox::BuildBox()
     active_logic2->SetSensitiveDetector(ionisd);
     active_logic2->SetUserLimits(new G4UserLimits(max_step_size_));
 
+    if (visibility_) {
+      G4VisAttributes active_col = nexus::Blue();
+      active_logic2->SetVisAttributes(active_col);
+    }
+
   } else {
     new G4PVPlacement(0, G4ThreeVector(0., 0., active_z_pos), active_logic,
                     "ACTIVE", LXe_logic_, false, 2, false);
