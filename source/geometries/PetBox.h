@@ -84,6 +84,8 @@ private:
   G4double panel_sipm_xy_size_, dist_sipms_panel_sipms_;
   G4double wls_depth_;
 
+  G4bool add_teflon_block_;
+
   G4double max_step_size_;
 
   /// Messenger for the definition of control commands

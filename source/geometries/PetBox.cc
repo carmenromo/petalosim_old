@@ -77,6 +77,7 @@ PetBox::PetBox() : GeometryBase(),
                    panel_sipm_xy_size_(66. * mm),
                    dist_sipms_panel_sipms_(0.3 * mm),
                    wls_depth_(0.001 * mm),
+                   add_teflon_block_(0),
                    max_step_size_(1. * mm)
 
 {
@@ -102,6 +103,9 @@ PetBox::PetBox() : GeometryBase(),
   time_cmd.SetUnitCategory("Time");
   time_cmd.SetParameterName("sipm_time_binning", false);
   time_cmd.SetRange("sipm_time_binning>0.");
+
+  msg_->DeclareProperty("add_teflon_block", add_teflon_block_,
+    "Boolean to add a teflon block reducing the xenon volume to force gammas to send the light to single sensors");
 }
 
 PetBox::~PetBox()
