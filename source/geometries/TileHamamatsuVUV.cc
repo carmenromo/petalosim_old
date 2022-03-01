@@ -34,7 +34,7 @@ using namespace CLHEP;
 TileHamamatsuVUV::TileHamamatsuVUV() : TileGeometryBase(),
                                        tile_x_(30.9 * mm),
                                        tile_y_(30.7 * mm),
-                                       tile_z_(3. * mm),
+                                       tile_z_(2.2 * mm),
                                        sipm_pitch_(7.5 * mm),
                                        n_rows_(4),
                                        n_columns_(4),

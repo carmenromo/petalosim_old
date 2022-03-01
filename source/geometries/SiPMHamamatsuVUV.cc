@@ -51,7 +51,7 @@ void SiPMHamamatsuVUV::Construct()
   // Hammamatsu 6x6mm VUV
   G4double sipm_x = 5.95 * mm;
   G4double sipm_y = 5.85 * mm;
-  G4double sipm_z = 1.2 * mm;
+  G4double sipm_z = 0.4  * mm;
 
   SetDimensions(G4ThreeVector(sipm_x, sipm_y, sipm_z));
 
