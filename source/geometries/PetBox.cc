@@ -131,7 +131,7 @@ void PetBox::Construct()
 void PetBox::BuildBox()
 {
 
-  // BOX
+  /// BOX  ///////////////////////////////////////////////////
   G4Box *box_solid =
       new G4Box("BOX", box_size_ / 2., box_size_ / 2., box_size_ / 2.);
 
@@ -142,7 +142,7 @@ void PetBox::BuildBox()
   new G4PVPlacement(0, G4ThreeVector(0., 0., 0.), box_logic,
                     "BOX", lab_logic_, false, 0, false);
 
-  // LXe
+  /// LXe ///////////////////////////////////////////////////
   G4double LXe_size = box_size_ - 2. * box_thickness_;
   G4Box *LXe_solid =
       new G4Box("LXe", LXe_size / 2., LXe_size / 2., LXe_size / 2.);
@@ -155,7 +155,7 @@ void PetBox::BuildBox()
   new G4PVPlacement(0, G4ThreeVector(0., 0., 0.),
                     LXe_logic_, "LXE", box_logic, false, 0, false);
 
-  // Aluminum cylinder
+  /// Aluminum cylinder  ////////////////////////////////////
   G4double aluminum_cyl_rad = 40. * mm;
   G4double aluminum_cyl_len = 19. * mm;
   G4Tubs *aluminum_cyl_solid =
@@ -170,7 +170,7 @@ void PetBox::BuildBox()
   new G4PVPlacement(G4Transform3D(rot, G4ThreeVector(0., aluminum_cyl_ypos, 0.)),
                     aluminum_cyl_logic, "ALUMINUM_CYL", LXe_logic_, false, 0, false);
 
-  // INTERNAL HAT
+  /// INTERNAL HAT  /////////////////////////////////////////
   G4Box *internal_hat_solid =
       new G4Box("INTERNAL_HAT", ih_x_size_ / 2., ih_y_size_ / 2., ih_z_size_ / 2.);
 
@@ -194,7 +194,7 @@ void PetBox::BuildBox()
   new G4PVPlacement(0, G4ThreeVector(0., -ih_thick_roof_ / 2., 0.), vacuum_hat_logic,
                     "VACUUM_HAT", internal_hat_logic, false, 0, false);
 
-  // SOURCE TUBE
+  /// SOURCE TUBE  //////////////////////////////////////////
   G4double source_tube_ext_radius = source_tube_int_radius_ + source_tube_thick_wall_;
   G4double source_tube_length = ih_y_size_ - ih_thick_roof_ - dist_source_roof_;
   G4Tubs *source_tube_solid =
@@ -219,7 +219,7 @@ void PetBox::BuildBox()
   new G4PVPlacement(0, G4ThreeVector(0., 0., source_tube_thick_roof_ / 2.), air_source_tube_logic,
                     "AIR_SOURCE_TUBE", source_tube_logic, false, 0, false);
 
-  // SOURCE TUBE INSIDE BOX
+  /// SOURCE TUBE INSIDE BOX  ///////////////////////////////
   G4Tubs *source_tube_inside_box_solid =
       new G4Tubs("SOURCE_TUBE", 0, source_tube_ext_radius, box_thickness_ / 2., 0, twopi);
 
@@ -238,8 +238,7 @@ void PetBox::BuildBox()
   new G4PVPlacement(0, G4ThreeVector(0., 0., 0.), air_source_tube_inside_box_logic,
                     "AIR_SOURCE_TUBE", source_tube_inside_box_logic, false, 0, false);
 
-  // TILES
-
+  /// TILES  /////////////////////////////////////////////////
 
   if (tile_type_d_ == "HamamatsuVUV") {
     tile_ = new TileHamamatsuVUV();
@@ -296,7 +295,8 @@ void PetBox::BuildBox()
   IonizationSD *ionisd = new IonizationSD("/PETALO/ACTIVE");
   G4SDManager::GetSDMpointer()->AddNewDetector(ionisd);
 
-  // 2 ACTIVE REGIONS
+  /// 2 ACTIVE REGIONS  /////////////////////////////////////
+
   G4double active_z_pos_max = box_size_ / 2. - box_thickness_ - dist_dice_flange_ - tile_thickn_;
   if (tile_type_d_ == "HamamatsuBlue"){
     active_z_pos_max = box_size_ / 2. - box_thickness_ - dist_dice_flange_ - tile_thickn_ - dist_sipms_panel_sipms_ - panel_thickness_ - wls_depth_;
@@ -441,7 +441,7 @@ void PetBox::BuildBox()
   new G4PVPlacement(0, G4ThreeVector(0., entry_panel_ypos, entry_panel_zpos), entry_panel_logic,
                     "ENTRY_PANEL", LXe_logic_, false, 2, false);
 
-  // PYREX PANELS SURROUNDING THE SIPM DICE BOARDS
+  /// PYREX PANELS SURROUNDING THE SIPM DICE BOARDS  //////////////////
   G4Box *horiz_lat_panel_solid =
       new G4Box("LAT_PANEL", lat_panel_len_ / 2., panel_thickness_ / 2., horiz_lat_panel_z_size_ / 2.);
 
@@ -601,6 +601,8 @@ void PetBox::BuildBox()
 
 void PetBox::BuildSensors()
 {
+  /// SiPMs //////////////////////////////////////////////////
+
   G4double tile_size_x = tile_->GetDimensions().x();
   G4double tile_size_y = tile_->GetDimensions().y();
   full_row_size_ = n_tile_columns_ * tile_size_x;
